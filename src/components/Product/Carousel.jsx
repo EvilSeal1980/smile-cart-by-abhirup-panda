@@ -14,6 +14,15 @@ const Carousel = ({ imageUrls, title }) => {
   };
 
   const handleNext = () => {
+    /*
+  we don't call the resetTimer function inside
+  handleNext instead of calling it separately
+  on right click. The reason is that handleNext
+  is also used in the useEffect for automatic
+  image scrolling. If we call the resetTimer
+  inside handleNext, it will reset the timer
+  every time the timer is executed.
+  */
     setCurrentIndex(prevIndex => (prevIndex + 1) % imageUrls.length);
   };
 

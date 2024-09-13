@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import productsApi from "apis/product";
+import productsApi from "apis/products";
 import { Header, PageLoader } from "components/commons";
 import ProductListItem from "components/ProductList/ProductListItem";
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import productsApi from "apis/product";
+import productsApi from "apis/products";
 import { Header, PageNotFound, PageLoader } from "components/commons";
 import Carousel from "components/Product/Carousel";
 import { Typography } from "neetoui";
