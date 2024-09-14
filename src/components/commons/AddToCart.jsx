@@ -1,7 +1,9 @@
+/* eslint-disable prettier/prettier */
+import useSelectedQuantity from "components/hooks/useSelectedQuantity";
 import { Button } from "neetoui";
-import useCartItemsStore from "stores/useCartItemsStore";
-// import CartItemsContext from "src/contexts/CartItemsContext";
-import { shallow } from "zustand/shallow";
+import { isNil } from "ramda";
+
+import ProductQuantity from "./ProductQuantity";
 
 /*
 However, there is one issue with the above implementation.
@@ -18,14 +20,10 @@ comparator function, which performs a shallow comparison of
 the properties or elements of the object or array generated
 using the selector function.
 */
-const AddToCart = ({ slug }) => {
-  const { isInCart, toggleIsInCart } = useCartItemsStore(
-    store => ({
-      isInCart: store.cartItems.includes(slug),
-      toggleIsInCart: store.toggleIsInCart,
-    }),
-    shallow
-  );
+
+const AddToCart = ({ slug, availableQuantity }) => {
+  const { selectedQuantity, setSelectedQuantity } = useSelectedQuantity(slug);
+
   /*
   Since the AddToCart button comes inside the <Link> component,
   clicking the button would take us to the product page. To
@@ -38,16 +36,22 @@ const AddToCart = ({ slug }) => {
   const handleClick = e => {
     e.stopPropagation();
     e.preventDefault();
-    toggleIsInCart(slug);
+    setSelectedQuantity(1);
   };
 
-  return (
-    <Button
-      label={isInCart ? "Remove from cart" : "Add to cart"}
-      size="large"
-      onClick={handleClick}
-    />
-  );
+  // return (
+  //   <Button
+  //     label={isInCart ? "Remove from cart" : "Add to cart"}
+  //     size="large"
+  //     onClick={handleClick}
+  //   />
+  // );
+
+  if (isNil(selectedQuantity)) {
+    return <Button label="Add to cart" size="large" onClick={handleClick} />;
+  }
+
+  return <ProductQuantity {...{ slug, availableQuantity }} />;
 };
 
 export default AddToCart;

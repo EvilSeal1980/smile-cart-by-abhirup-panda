@@ -4,7 +4,13 @@ import { Link } from "react-router-dom";
 import routes from "routes";
 import { buildUrl } from "utils/url";
 
-const ProductListItem = ({ imageUrl, name, offerPrice, slug }) => (
+const ProductListItem = ({
+  imageUrl,
+  name,
+  offerPrice,
+  slug,
+  availableQuantity,
+}) => (
   <Link
     className="neeto-ui-border-black neeto-ui-rounded-xl flex w-48 flex-col items-center justify-between border p-4"
     //to={`products/${slug}`}
@@ -17,7 +23,7 @@ const ProductListItem = ({ imageUrl, name, offerPrice, slug }) => (
     <Typography>${offerPrice}</Typography>
     {/* Since the prop and its value has the same name, we can use the spread
     syntax mentioned in this lesson to pass the slug prop. */}
-    <AddToCart {...{ slug }} />
+    <AddToCart {...{ availableQuantity, slug }} />
   </Link>
 );
 
