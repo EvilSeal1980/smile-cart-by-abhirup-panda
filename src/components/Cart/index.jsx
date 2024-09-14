@@ -16,7 +16,25 @@ import ProductCard from "./ProductCard";
 const Cart = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { cartItems, setSelectedQuantity } = useCartItemsStore();
+
+  //   const { cartItems, setSelectedQuantity } = useCartItemsStore();
+
+  const { cartItems, setSelectedQuantity } = useCartItemsStore.pick();
+
+  //   In addition to the above properties, the cart items store has another property, removeCartItem. Therefore, we should use selector and comparator functions as shown:
+
+  // import { shallow } from "zustand/shallow";
+
+  // const { cartItems, setSelectedQuantity } = useCartItemsStore(
+  //   store => ({
+  //     cartItems: store.cartItems,
+  //     setSelectedQuantity: store.setSelectedQuantity,
+  //   }),
+  //   shallow
+  // );
+  // With the transformer, we can simplify the above boilerplate code as shown:
+
+  // const { cartItems, setSelectedQuantity } = useCartItemsStore.pick();
 
   const slugs = keys(cartItems);
 

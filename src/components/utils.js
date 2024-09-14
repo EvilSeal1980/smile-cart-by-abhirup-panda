@@ -12,6 +12,10 @@ to access the cart items inside our utility function:
 export const cartTotalOf = (products, priceKey) => {
   const { cartItems } = useCartItemsStore.getState();
 
+  // const cartItems = useCartItemsStore.pickFrom();
+  //   Here is how the above code will get transpiled:
+  //   const cartItems = useCartItemsStore(store => store.cartItems);
+
   return sum(
     products.map(product => product[priceKey] * cartItems[product.slug])
   );
