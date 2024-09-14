@@ -1,17 +1,13 @@
+import {
+  keysToCamelCase,
+  serializeKeysToSnakeCase,
+} from "@bigbinary/neeto-cist";
 import axios from "axios";
-import { keysToCamelCase } from "neetocist";
+import { evolve } from "ramda";
 
-/*
-Since Axios response schema is designed that way, we have to
-repetitively extract data from the response for all API
-requests throughout our codebase. Luckily, we can use Axios
-interceptors to automate this process.
-
-Axios interceptors are functions that can be registered
-globally with Axios. They allow you to intercept and modify
-HTTP requests before they are sent and responses before they
-are processed.
-*/
+const transformResponseKeysToCamelCase = response => {
+  if (response.data) response.data = keysToCamelCase(response.data);
+};
 
 const responseInterceptors = () => {
   axios.interceptors.response.use(response => {
@@ -22,21 +18,44 @@ const responseInterceptors = () => {
 };
 
 /*
-To inform the server about the expected data format Axios
-should receive in response, we can include an Accept header
-in the HTTP request configuration, specifying the desired
-data format. In our case, we expect the response from the
-server to be in JSON format. To achieve this, we can set the
-Accept header to application/json.
+ * This comment explains a refactoring suggestion for an Axios request interceptor,
+ * specifically focusing on leveraging Ramda's currying feature for conciseness.
+ *
+ * Original Code (Before Refactoring):
+ * ```javascript
+ * axios.interceptors.request.use(
+ *   (request) => evolve({
+ *     data: serializeKeysToSnakeCase,
+ *     params: serializeKeysToSnakeCase
+ *   }, request), // Explicitly passing 'request'
+ *   (error) => Promise.reject(error)
+ * );
+ * ```
+ *
+ * Refactored Code (After Applying Currying):
+ * ```javascript
+ * axios.interceptors.request.use(
+ *   evolve({
+ *     data: serializeKeysToSnakeCase,
+ *     params: serializeKeysToSnakeCase
+ *   }), // No need to pass 'request' explicitly
+ *   (error) => Promise.reject(error)
+ * );
+ * ```
+ *
+ * Explanation:
+ * - In the refactored code, `evolve` is called with only one argument (the transformation object).
+ * - Due to currying, `evolve` returns a new function that expects the `request` object.
+ * - Axios's interceptor automatically provides the `request` to this new function.
+ *
+ * Benefit:
+ * - Eliminates the need for the explicit wrapper function, leading to cleaner code.
+ */
 
-To inform the server about the format of the data being sent
-in the request body, we can include Content-Type header in the
-HTTP request. Since we are sending request data in JSON format,
-we can set the Content-Type header to application/json.
-*/
-
-const transformResponseKeysToCamelCase = response => {
-  if (response.data) response.data = keysToCamelCase(response.data);
+const requestInterceptors = () => {
+  axios.interceptors.request.use(
+    evolve({ data: serializeKeysToSnakeCase, params: serializeKeysToSnakeCase })
+  );
 };
 
 const setHttpHeaders = () => {
@@ -51,4 +70,5 @@ export default function initializeAxios() {
     "https://smile-cart-backend-staging.neetodeployapp.com/";
   setHttpHeaders();
   responseInterceptors();
+  requestInterceptors();
 }

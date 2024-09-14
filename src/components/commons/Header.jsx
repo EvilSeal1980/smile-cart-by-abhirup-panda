@@ -8,7 +8,7 @@ components. To eliminate redundancy, we can extract the
 common code into a component named Header.jsx.
 */
 
-const Header = ({ title, shouldShowBackButton = true }) => {
+const Header = ({ title, shouldShowBackButton = true, actionBlock }) => {
   const history = useHistory();
 
   return (
@@ -23,6 +23,7 @@ const Header = ({ title, shouldShowBackButton = true }) => {
         <Typography style="h1" weight="semibold">
           {title}
         </Typography>
+        <div className="flex items-end space-x-4">{actionBlock}</div>
       </div>
       <hr className="neeto-ui-bg-black h-1" />
     </div>
