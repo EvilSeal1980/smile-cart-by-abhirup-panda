@@ -1,5 +1,6 @@
+/* eslint-disable prettier/prettier */
 import { isNotEmpty } from "neetocist";
-import { assoc, dissoc } from "ramda";
+import { assoc, dissoc, evolve } from "ramda";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -7,6 +8,7 @@ const useCartItemsStore = create(
   persist(
     set => ({
       cartItems: {},
+      removeCartItem: slug => set(evolve({ cartItems: dissoc(slug) })),
       setSelectedQuantity: (slug, quantity) =>
         set(({ cartItems }) => {
           if (quantity <= 0 && isNotEmpty(quantity)) {
