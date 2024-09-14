@@ -1,7 +1,10 @@
+import { useContext } from "react";
+
 import { LeftArrow } from "neetoicons";
 import { Typography } from "neetoui";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useHistory } from "react-router-dom";
+import CartItemsContext from "src/contexts/CartItemsContext";
 
 /*
 we are writing the same JSX in the ProductList and Product
@@ -9,13 +12,10 @@ components. To eliminate redundancy, we can extract the
 common code into a component named Header.jsx.
 */
 
-const Header = ({
-  title,
-  shouldShowBackButton = true,
-  actionBlock,
-  cartItemsCount,
-}) => {
+const Header = ({ title, shouldShowBackButton = true, actionBlock }) => {
   const history = useHistory();
+  const [cartItems] = useContext(CartItemsContext);
+  const cartItemsCount = cartItems.length;
 
   return (
     <div className="m-2">

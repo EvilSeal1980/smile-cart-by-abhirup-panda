@@ -5,7 +5,7 @@ import { Header, PageLoader } from "components/commons";
 import useDebounce from "hooks/useDebounce";
 import { Search } from "neetoicons";
 import { Input, NoData } from "neetoui";
-import { isEmpty, without } from "ramda";
+import { isEmpty } from "ramda";
 
 import ProductListItem from "./ProductListItem";
 
@@ -54,7 +54,7 @@ const ProductList = () => {
     * `cartItems` will store the slugs of items added to the cart.
     * This allows both `Header` (to display cart count) and `AddToCart` (to add items) to access and update the cart data efficiently.
 */
-  const [cartItems, setCartItems] = useState([]);
+  // const [cartItems, setCartItems] = useState([]);
   const debouncedSearchKey = useDebounce(searchKey);
 
   /*
@@ -96,12 +96,12 @@ const ProductList = () => {
                 * isInCart
                 * toggleIsInCart
 */
-  const toggleIsInCart = slug =>
-    setCartItems(prevCartItems =>
-      prevCartItems.includes(slug)
-        ? without([slug], cartItems)
-        : [slug, ...cartItems]
-    );
+  // const toggleIsInCart = slug =>
+  //   setCartItems(prevCartItems =>
+  //     prevCartItems.includes(slug)
+  //       ? without([slug], cartItems)
+  //       : [slug, ...cartItems]
+  //   );
 
   const fetchProducts = async () => {
     try {
@@ -125,7 +125,7 @@ const ProductList = () => {
   return (
     <div className="flex h-screen flex-col">
       <Header
-        cartItemsCount={cartItems.length}
+        // cartItemsCount={cartItems.length}
         shouldShowBackButton={false}
         title="Smile Cart"
         actionBlock={
@@ -146,8 +146,8 @@ const ProductList = () => {
             <ProductListItem
               key={product.slug}
               {...product}
-              isInCart={cartItems.includes(product.slug)}
-              toggleIsInCart={() => toggleIsInCart(product.slug)}
+              // isInCart={cartItems.includes(product.slug)}
+              // toggleIsInCart={() => toggleIsInCart(product.slug)}
             />
           ))}
         </div>
