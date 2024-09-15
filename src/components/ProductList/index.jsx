@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+/* eslint-disable prettier/prettier */
+import { useState } from "react";
 
-import productsApi from "apis/products";
 import { Header, PageLoader } from "components/commons";
+import { useFetchProducts } from "hooks/reactQuery/useProductsApi";
 import useDebounce from "hooks/useDebounce";
 import { Search } from "neetoicons";
 import { Input, NoData } from "neetoui";
@@ -29,8 +30,8 @@ has passed after the user stops typing. This prevents sending
 a request for each keystroke.
 */
 const ProductList = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [products, setProducts] = useState([]);
+  // const [isLoading, setIsLoading] = useState(true);
+  // const [products, setProducts] = useState([]);
   const [searchKey, setSearchKey] = useState("");
   /*
 ** React Component Structure and Data Flow **
@@ -57,6 +58,17 @@ const ProductList = () => {
 */
   // const [cartItems, setCartItems] = useState([]);
   const debouncedSearchKey = useDebounce(searchKey);
+
+  // We will destructure the products property from data and
+  // default it to an empty array for our convenience. Since
+  // the API results may not be available immediately, we
+  // are setting data to default to an empty object {}.
+
+  const { data, isLoading } = useFetchProducts({
+    searchTerm: debouncedSearchKey,
+  });
+
+  const products = data?.products || [];
 
   /*
    * Toggles the presence of an item (identified by `slug`) in the cart.
@@ -104,20 +116,20 @@ const ProductList = () => {
   //       : [slug, ...cartItems]
   //   );
 
-  const fetchProducts = async () => {
-    try {
-      const data = await productsApi.fetch({ searchTerm: debouncedSearchKey });
-      setProducts(data.products);
-    } catch (error) {
-      console.log("An error occurred:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  // const fetchProducts = async () => {
+  //   try {
+  //     const data = await productsApi.fetch({ searchTerm: debouncedSearchKey });
+  //     setProducts(data.products);
+  //   } catch (error) {
+  //     console.log("An error occurred:", error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchProducts();
-  }, [debouncedSearchKey]);
+  // useEffect(() => {
+  //   fetchProducts();
+  // }, [debouncedSearchKey]);
 
   if (isLoading) {
     return <PageLoader />;

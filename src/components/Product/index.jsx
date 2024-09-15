@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 
-import productsApi from "apis/products";
+// import productsApi from "apis/products";
 import {
   Header,
   PageLoader,
@@ -8,9 +8,10 @@ import {
   AddToCart,
 } from "components/commons";
 import useSelectedQuantity from "components/hooks/useSelectedQuantity";
+import { useShowProduct } from "hooks/reactQuery/useProductsApi";
 import i18n from "i18next";
 import { Button, Typography } from "neetoui";
-import { append, isNotNil } from "ramda";
+import { isNotNil } from "ramda";
 import { useParams } from "react-router-dom";
 import routes from "routes";
 import withTitle from "utils/withTitle";
@@ -18,39 +19,39 @@ import withTitle from "utils/withTitle";
 import Carousel from "./Carousel";
 
 const Product = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
-  const [product, setProduct] = useState({});
+  // const [isLoading, setIsLoading] = useState(true);
+  // const [isError, setIsError] = useState(false);
+  // const [product, setProduct] = useState({});
 
   const { slug } = useParams();
 
+  // To improve readability, we will alias the data property
+  // returned by the useShowProduct hook to product. We will
+  // also set its default value to an empty object. By
+  // setting the default value, we can avoid potential issues
+  //that may arise if the data value is not available or not yet loaded.
+
+  const { data: product = {}, isLoading, isError } = useShowProduct(slug);
+
   const { selectedQuantity, setSelectedQuantity } = useSelectedQuantity(slug);
 
-  const fetchProduct = async () => {
-    try {
-      const response = await productsApi.show(slug);
-      setProduct(response);
-    } catch (error) {
-      setIsError(true);
-      console.log("An error occurred:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  // const fetchProduct = async () => {
+  //   try {
+  //     const response = await productsApi.show(slug);
+  //     setProduct(response);
+  //   } catch (error) {
+  //     setIsError(true);
+  //     console.log("An error occurred:", error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchProduct();
-  }, []);
+  // useEffect(() => {
+  //   fetchProduct();
+  // }, []);
 
-  const {
-    name,
-    description,
-    mrp,
-    offerPrice,
-    imageUrls,
-    imageUrl,
-    availableQuantity,
-  } = product;
+  const { name, description, mrp, offerPrice, imageUrls, imageUrl } = product;
 
   const totalDiscounts = mrp - offerPrice;
   const discountPercentage = ((totalDiscounts / mrp) * 100).toFixed(1);
@@ -68,7 +69,8 @@ const Product = () => {
         <div className="w-2/5">
           <div className="flex justify-center gap-16">
             {isNotNil(imageUrls) ? (
-              <Carousel imageUrls={append(imageUrl, imageUrls)} title={name} />
+              // <Carousel imageUrls={append(imageUrl, imageUrls)} title={name} />
+              <Carousel />
             ) : (
               <img alt={name} className="w-48" src={imageUrl} />
             )}
@@ -84,7 +86,7 @@ const Product = () => {
             {discountPercentage}% off
           </Typography>
           <div className="flex space-x-10">
-            <AddToCart {...{ availableQuantity, slug }} />
+            <AddToCart {...{ slug }} />
             <Button
               className="bg-neutral-800 hover:bg-neutral-950"
               label="Buy now"
