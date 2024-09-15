@@ -5,10 +5,11 @@ import { Header, PageLoader } from "components/commons";
 import { useFetchProducts } from "hooks/reactQuery/useProductsApi";
 import useDebounce from "hooks/useDebounce";
 import { Search } from "neetoicons";
-import { Input, NoData } from "neetoui";
+import { Input, NoData, Pagination } from "neetoui";
 import { isEmpty } from "ramda";
 import withTitle from "utils/withTitle";
 
+import { DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE } from "./constants";
 import ProductListItem from "./ProductListItem";
 
 /*
@@ -33,6 +34,7 @@ const ProductList = () => {
   // const [isLoading, setIsLoading] = useState(true);
   // const [products, setProducts] = useState([]);
   const [searchKey, setSearchKey] = useState("");
+  const [currentPage, setCurrentPage] = useState(DEFAULT_PAGE_INDEX);
   /*
 ** React Component Structure and Data Flow **
 
@@ -64,9 +66,14 @@ const ProductList = () => {
   // the API results may not be available immediately, we
   // are setting data to default to an empty object {}.
 
-  const { data: { products = [] } = {}, isLoading } = useFetchProducts({
+  const productsParams = {
     searchTerm: debouncedSearchKey,
-  });
+    page: currentPage,
+    pageSize: DEFAULT_PAGE_SIZE,
+  };
+
+  const { data: { products = [], totalProductsCount } = {}, isLoading } =
+    useFetchProducts(productsParams);
 
   // const products = data?.products || [];
 
@@ -147,7 +154,24 @@ const ProductList = () => {
             prefix={<Search />}
             type="search"
             value={searchKey}
-            onChange={event => setSearchKey(event.target.value)}
+            onChange={event => {
+              setSearchKey(event.target.value);
+              setCurrentPage(DEFAULT_PAGE_INDEX);
+              /*
+               * Edge Case: Pagination and Search
+               *
+               * Issue:
+               *   - When searching on a page other than the first (e.g., page 3),
+               *     an empty response may lead to a "No products to show" page.
+               *   - This happens because the search request includes the current page number,
+               *     but the search results might not span that many pages.
+               *
+               * Solution:
+               *   - Reset the page number to `DEFAULT_PAGE_INDEX` whenever a search is performed.
+               *   - This ensures the search starts from the first page,
+               *     displaying the most relevant results immediately.
+               */
+            }}
           />
         }
       />
@@ -165,6 +189,14 @@ const ProductList = () => {
           ))}
         </div>
       )}
+      <div className="mb-5 self-end">
+        <Pagination
+          count={totalProductsCount}
+          navigate={page => setCurrentPage(page)}
+          pageNo={currentPage || DEFAULT_PAGE_INDEX}
+          pageSize={DEFAULT_PAGE_SIZE}
+        />
+      </div>
     </div>
   );
 };
