@@ -37,7 +37,12 @@
 import { QUERY_KEYS } from "constants/query";
 
 import productsApi from "apis/products";
-import { useQuery } from "react-query";
+import { existsBy } from "neetocist";
+import { Toastr } from "neetoui";
+import { prop } from "ramda";
+import { useTranslation } from "react-i18next";
+import { useQueries, useQuery } from "react-query";
+import useCartItemsStore from "stores/useCartItemsStore";
 
 // here struck as I put curly {} and didn't use return
 export const useShowProduct = slug =>
@@ -52,3 +57,46 @@ export const useFetchProducts = params =>
     queryFn: () => productsApi.fetch(params),
     keepPreviousData: true,
   });
+
+export const useFetchCartProducts = slugs => {
+  const { t } = useTranslation();
+  const { cartItems, setSelectedQuantity } = useCartItemsStore();
+
+  const responses = useQueries(
+    slugs.map(slug => ({
+      queryKey: [QUERY_KEYS.PRODUCTS, slug],
+      queryFn: () => productsApi.show(slug),
+      onSuccess: ({ availableQuantity, name }) => {
+        if (availableQuantity >= cartItems[slug]) return;
+
+        setSelectedQuantity(slug, availableQuantity);
+        if (availableQuantity === 0) {
+          Toastr.error(t("error.removedFromCart", { name }), {
+            autoClose: 2000,
+          });
+        }
+      },
+    }))
+  );
+
+  /*
+   * Handling `useQueries` Results
+   *
+   * - Extracts the `data` property from each query result object.
+   * - Filters out objects where `data` is `undefined` or `null`
+   *   (unresolved queries or fetch errors).
+   * - Provides an array of valid data results for further processing.
+   */
+  const data = responses.map(prop("data")).filter(Boolean);
+
+  /*
+   * Checking for In-Progress Requests
+   *
+   * - Utilizes `existsBy` from 'neetocist' to efficiently check if any query in the `responses` array
+   *   is still loading (`isLoading: true`).
+   * - Returns `true` if at least one query is loading, `false` otherwise.
+   */
+  const isLoading = existsBy({ isLoading: true }, responses);
+
+  return { data, isLoading };
+};
