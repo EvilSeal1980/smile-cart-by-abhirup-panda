@@ -64,11 +64,11 @@ const ProductList = () => {
   // the API results may not be available immediately, we
   // are setting data to default to an empty object {}.
 
-  const { data, isLoading } = useFetchProducts({
+  const { data: { products = [] } = {}, isLoading } = useFetchProducts({
     searchTerm: debouncedSearchKey,
   });
 
-  const products = data?.products || [];
+  // const products = data?.products || [];
 
   /*
    * Toggles the presence of an item (identified by `slug`) in the cart.
