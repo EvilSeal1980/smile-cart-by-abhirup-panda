@@ -1,4 +1,5 @@
 import Cart from "components/Cart/index";
+import Checkout from "components/Checkout/index";
 import { PageNotFound } from "components/commons";
 import Product from "components/Product/index";
 import ProductList from "components/ProductList/index";
@@ -24,6 +25,7 @@ const App = () => (
     <Route exact component={ProductList} path={routes.products.index} />
     <Route exact component={Cart} path={routes.cart} />
     <Redirect exact from={routes.root} to={routes.products.index} />
+    <Route exact component={Checkout} path={routes.checkout} />
     <Route component={PageNotFound} path="*" />
   </Switch>
 );
