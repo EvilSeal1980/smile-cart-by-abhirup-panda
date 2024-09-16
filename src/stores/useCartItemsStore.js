@@ -17,6 +17,7 @@ const useCartItemsStore = create(
 
           return { cartItems: assoc(slug, String(quantity), cartItems) };
         }),
+      clearCart: () => set({ cartItems: {} }),
     }),
     { name: "cart-items-store" }
   )
