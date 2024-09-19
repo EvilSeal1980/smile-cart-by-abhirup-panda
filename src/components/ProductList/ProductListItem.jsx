@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 import AddToCart from "components/commons/AddToCart";
 import { Typography } from "neetoui";
 import { Link } from "react-router-dom";
@@ -21,4 +23,23 @@ const ProductListItem = ({ imageUrl, name, offerPrice, slug }) => (
   </Link>
 );
 
-export default ProductListItem;
+export default memo(ProductListItem);
+
+/*
+ * Memoization in React:
+ *
+ * - React.memo:
+ *   - A higher-order component (HOC).
+ *   - Prevents re-rendering of functional components if props remain the same.
+ *   - Returns the cached result from memory.
+ *
+ * - useMemo:
+ *   - A React hook.
+ *   - Memoizes the result of a function/computation.
+ *   - Re-runs only when dependencies in the dependency array change.
+ *
+ * - useCallback:
+ *   - A React hook.
+ *   - Memoizes a callback function.
+ *   - Re-runs only when dependencies in the dependency array change.
+ */
