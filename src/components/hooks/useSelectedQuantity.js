@@ -16,8 +16,3 @@ const useSelectedQuantity = slug => {
 };
 
 export default useSelectedQuantity;
-
-/*
-The useSelectedQuantity hook returns an object containing
-the selectedQuantity and setSelectedQuantity functions.
-*/

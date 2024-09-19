@@ -11,7 +11,6 @@ const ProductCard = ({ slug, imageUrl, offerPrice, mrp, name }) => {
 
   const { t } = useTranslation();
 
-  //   const removeCartItem = useCartItemsStore(prop("removeCartItem"));
   const removeCartItem = useCartItemsStore.pickFrom();
 
   return (

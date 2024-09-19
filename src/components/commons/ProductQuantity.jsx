@@ -13,13 +13,6 @@ const ProductQuantity = ({ slug }) => {
 
   const { selectedQuantity, setSelectedQuantity } = useSelectedQuantity(slug);
 
-  /*
-Passing available quantity through prop drilling
-So, used react query
-ProductList -> ProductListItem -> AddToCart -> ProductQuantity
-Product -> AddToCart -> ProductQuantity
-Cart -> ProductCard -> ProductQuantity
-  */
   const { data: product = {} } = useShowProduct(slug);
   const { availableQuantity } = product;
 

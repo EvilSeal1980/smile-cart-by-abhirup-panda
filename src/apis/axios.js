@@ -43,41 +43,6 @@ const responseInterceptors = () => {
   );
 };
 
-/*
- * This comment explains a refactoring suggestion for an Axios request interceptor,
- * specifically focusing on leveraging Ramda's currying feature for conciseness.
- *
- * Original Code (Before Refactoring):
- * ```javascript
- * axios.interceptors.request.use(
- *   (request) => evolve({
- *     data: serializeKeysToSnakeCase,
- *     params: serializeKeysToSnakeCase
- *   }, request), // Explicitly passing 'request'
- *   (error) => Promise.reject(error)
- * );
- * ```
- *
- * Refactored Code (After Applying Currying):
- * ```javascript
- * axios.interceptors.request.use(
- *   evolve({
- *     data: serializeKeysToSnakeCase,
- *     params: serializeKeysToSnakeCase
- *   }), // No need to pass 'request' explicitly
- *   (error) => Promise.reject(error)
- * );
- * ```
- *
- * Explanation:
- * - In the refactored code, `evolve` is called with only one argument (the transformation object).
- * - Due to currying, `evolve` returns a new function that expects the `request` object.
- * - Axios's interceptor automatically provides the `request` to this new function.
- *
- * Benefit:
- * - Eliminates the need for the explicit wrapper function, leading to cleaner code.
- */
-
 const requestInterceptors = () => {
   axios.interceptors.request.use(
     evolve({ data: serializeKeysToSnakeCase, params: serializeKeysToSnakeCase })

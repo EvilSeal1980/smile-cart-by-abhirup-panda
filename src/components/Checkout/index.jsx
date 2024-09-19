@@ -116,7 +116,6 @@ const Checkout = () => {
             </Typography>
           </div>
           <div className="mt-8 space-y-4">
-            {/* Form will be displayed here */}
             <Form />
             <Checkbox
               defaultChecked
@@ -126,15 +125,6 @@ const Checkout = () => {
           </div>
         </div>
         <div className="neeto-ui-bg-gray-300 h-screen w-1/2 pt-10">
-          {/* Items added to cart will be displayed here */}
-          {/* <div className="mt-auto flex justify-center">
-            <Button
-              className="bg-neutral-800 w-1/3 justify-center"
-              disabled={isSubmitDisabled}
-              label={t("confirmOrder")}
-              type="submit"
-            />
-             </div>*/}
           <Items {...{ isSubmitDisabled }} />
         </div>
       </div>

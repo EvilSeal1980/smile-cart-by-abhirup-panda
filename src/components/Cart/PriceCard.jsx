@@ -23,7 +23,6 @@ const PriceCard = ({ totalMrp, totalOfferPrice }) => {
           "line-through": isDiscountPresent,
         })}
       >
-        {/* Total MRP: <span>${totalMrp}</span> */}
         <Trans
           components={{ typography: <span /> }}
           i18nKey="totalMrp"
@@ -33,10 +32,6 @@ const PriceCard = ({ totalMrp, totalOfferPrice }) => {
       {isDiscountPresent && (
         <>
           <Typography className="flex justify-between text-green-700">
-            {/* Total discounts:{" "}
-            <span>
-              ${totalDiscounts} ({discountPercentage}%)
-            </span> */}
             <Trans
               components={{ span: <span /> }}
               i18nKey="totalDiscounts"
@@ -44,7 +39,6 @@ const PriceCard = ({ totalMrp, totalOfferPrice }) => {
             />
           </Typography>
           <Typography className="flex justify-between">
-            {/*Total offer price: <span>${totalOfferPrice}</span>*/}
             <Trans
               components={{ span: <span /> }}
               i18nKey="offerPrice"

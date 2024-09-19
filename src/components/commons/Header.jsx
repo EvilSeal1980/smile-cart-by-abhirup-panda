@@ -8,35 +8,9 @@ import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useHistory, Link } from "react-router-dom";
 import routes from "routes";
 import useCartItemsStore from "stores/useCartItemsStore";
-//import CartItemsContext from "src/contexts/CartItemsContext";
-
-/*
-we are writing the same JSX in the ProductList and Product
-components. To eliminate redundancy, we can extract the
-common code into a component named Header.jsx.
-*/
 
 const Header = ({ title, shouldShowBackButton = true, actionBlock }) => {
   const history = useHistory();
-  // const [cartItems] = useContext(CartItemsContext);
-  // const cartItemsCount = cartItems.length;
-
-  // const { cartItems } = useCartItemsStore();
-  // const cartItemsCount = cartItems.length;
-
-  /*
-  However, to truly leverage the performance benefits of
-  Zustand, we should use the store by passing a selector
-  function as the first argument to the hook. The selector
-  function allows you to retrieve only the necessary data
-  from Zustand store. In the case of the Header component,
-  it only needs to be aware of the cart items count. We can
-  achieve this by passing a selector function as shown:
-
-  Passing the selector function informs Zustand about what
-  each component is concerned with.
-  */
-  // const cartItemsCount = useCartItemsStore(store => store.cartItems.length);
 
   const cartItemsCount = useCartItemsStore(
     store => keys(store.cartItems).length

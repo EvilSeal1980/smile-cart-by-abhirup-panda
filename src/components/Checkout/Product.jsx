@@ -2,12 +2,6 @@ import { Typography, Tag } from "neetoui";
 import useCartItemsStore from "stores/useCartItemsStore";
 
 const Product = ({ name, imageUrl, offerPrice, slug }) => {
-  /*
-   This code is getting the value from the cartItems object in the Zustand
-   store that corresponds to the key specified by the slug variable.
-   It then renames this value to selectedQuantity for easier use in your
-   component.
-  */
   const { [slug]: selectedQuantity } = useCartItemsStore.pick("cartItems");
 
   return (
