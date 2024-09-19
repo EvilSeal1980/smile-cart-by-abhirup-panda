@@ -26,4 +26,4 @@ Smile Cart is a dynamic e-commerce web application that allows users to browse p
 
 # Live Demo
 
-Check out the live version of SmileCart [here](ecart-theta-one.vercel.app)
+Check out the live version of SmileCart [here](https://ecart-theta-one.vercel.app)
